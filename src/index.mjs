@@ -1,9 +1,14 @@
 import { Telegraf } from "telegraf";
 
+import { commands } from "./command/commands.mjs"
+
 const bot = new Telegraf(process.env.BOT_TOKEN, {
   telegram: { webhookReply: false }
 })
-bot.on("text", async (ctx) => ctx.reply("ok"))
+
+for (let command in commands)
+  bot.command(command, (ctx) => commands[command](ctx));
+bot.on("photo", async (ctx) => ctx.reply("STOP SENDING ME PICTURES"));
 
 export const handler = async (event) => {
   try {
